@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="echartMap" style="width: 500px;height:500px;"></div>
+    <script src="jquery.min.js"></script>
+    <script src="echarts.min.js"></script>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      $.get("../geo/市含县/320800_full.json", function(huaianJson) {
+        echarts.registerMap("huaian", huaianJson);
+        var chart = echarts.init(document.getElementById("echartMap"));
+        chart.setOption({
+          backgroundColor: "#404a59",
+          visualMap: {
+            type: "continuous",
+            min: 0,
+            max: 100,
+            text: ["High", "Low"],
+            realtime: false,
+            calculable: true,
+            color: ["#3ADEF1", "#0089FC", "#0057FE"],
+            show: false
+          },
+          series: [
+            {
+              type: "map",
+              mapType: "huaian",
+              roam: false,
+              label: {
+                normal: {
+                  show: true,
+                  color: "#fff"
+                },
+                emphasis: {
+                  show: true
+                }
+              },
+              itemStyle: {
+                emphasis: { label: { show: true } }
+              },
+              data: [
+                { name: "金湖县", value: 80 },
+                { name: "盱眙县", value: 50 },
+                { name: "涟水县", value: 80 },
+                { name: "洪泽区", value: 70 },
+                { name: "淮阴区", value: 80 },
+                { name: "淮安区", value: 40 },
+                { name: "清江浦区", value: 50 }
+              ]
+            }
+          ]
+        });
+      });
+    </script>
+  </body>
+</html>
