@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+  </head>
+  <body>
+   
+    <div id="map" style="width:100%;height:600px;"></div>
+    <script src="./echarts.js"></script>
+    <script src="./echarts-geoCoordJson.js"></script>
+    <script type="text/javascript">
+      var myChart=null,center = "韶关市";
+      var qr = [
+      {      name: "上海", value: 100 },
+              { name: "北京", value: 90 },
+              { name: "大连市", value: 80 },
+              { name: "重庆", value: 70 },
+              { name: "南昌市", value: 60 },
+              { name: "拉萨市", value: 50 },
+              { name: "中山市", value: 40 },
+              { name: "乌鲁木齐市", value: 30 },
+              { name: "柳州市", value: 20 },
+              { name: "南京市", value: 10 },
+              { name: "克拉玛依市", value: 10 },
+              { name: "吐鲁番地区", value: 10 },
+              
+      ];
+      // Step:3 conifg ECharts's path, link to echarts.js from current page.
+      // Step:3 为模块加载器配置echarts的路径，从当前页面链接到echarts.js，定义所需图表路径
+      option = {
+        backgroundColor: "#1b1b1b",
+        color: ["gold", "aqua", "lime"],
+        title: {
+          show: true,
+          text: " ",
+
+          x: "center",
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "{b}"
+        },
+        // toolbox: {
+        //   show: true,
+        //   orient: "vertical",
+        //   x: "right",
+        //   y: "center",
+        //   feature: {
+        //     mark: { show: true },
+        //     dataView: { show: true, readOnly: false },
+        //     restore: { show: true },
+        //     saveAsImage: { show: true }
+        //   }
+        // },
+        dataRange: {
+          min: 0,
+          max: 100,
+          calculable: true,
+          color: ["#ff3333", "orange", "yellow", "lime", "aqua"],
+          textStyle: {
+            color: "#fff"
+          },
+          show:false
+        },
+        series: [
+          
+          {
+            name: "全国",
+            type: "map",
+            roam: false,
+            hoverable: false,
+            mapType: "china",
+            itemStyle: {
+              normal: {
+                borderColor: "rgba(100,149,237,1)",
+                borderWidth: 0.5,
+                areaStyle: {
+                  color: "#1b1b1b"
+                }
+              }
+            },
+            data: [],
+            markLine: {
+              smooth: true,
+              symbol: ["none", "circle"],
+              symbolSize: 1,
+              itemStyle: {
+                normal: {
+                  color: "#fff",
+                  borderWidth: 1,
+                  borderColor: "rgba(30,144,255,0.5)"
+                }
+              },
+              data: []
+            },
+            geoCoord: mapGeoCoord
+          },
+          {
+            name: "工厂分布",
+            type: "map",
+            mapType: "china",
+            data: [],
+            markLine: {
+              smooth: true,
+              effect: {
+                show: true,
+                scaleSize: 2,
+                period: 30,
+                color: "#fff",
+                shadowBlur: 10
+              },
+              itemStyle: {
+                normal: {
+                  borderWidth: 1,
+                  lineStyle: {
+                    type: "solid",
+                    shadowBlur: 10
+                  }
+                }
+              },
+              
+              data: []
+            },
+            markPoint: {
+              symbol: "emptyCircle",
+              symbolSize: function(v) {
+                return 10 + v / 10;
+              },
+              effect: {
+                show: true,
+                shadowBlur: 0
+              },
+              itemStyle: {
+                normal: {
+                  label: { show: false }
+                },
+                emphasis: {
+                  label: { position: "top" }
+                }
+              },
+              data: [
+               
+              ]
+            }
+          }
+        ]
+      };
+      require.config({
+        paths: {
+          echarts: "./"
+        }
+      });
+
+      // Step:4 require echarts and use it in the callback.
+      // Step:4 动态加载echarts然后在回调函数中开始使用，注意保持按需加载结构定义图表路径
+      var ecConfig;
+      // alert(ecConfig);
+
+      require(["echarts", "echarts/chart/map"], function(ec) {
+        // ecConfig = require("echarts/config");
+
+        myChart = ec.init(document.getElementById("map"));
+        // initData();
+        loadAll();
+      });
+     
+      function loadAll() {
+        myChart.clear();
+        var qrdata = qr;
+        option.series[1].markLine.data = [];
+        for (var i = 0; i < qrdata.length; i++) {
+          var obj = new Object();
+          obj.name = qrdata[i].name;
+          var obj1 = new Object();
+          obj1.name = center;
+          var arr = new Array();
+          arr.push(obj);
+          arr.push(obj1);
+          option.series[1].markLine.data.push(arr);
+        }
+        option.series[1].markPoint.data = qrdata;
+        myChart.setOption(option);
+      }
+      window.onresize = function() {
+        myChart.resize();
+      };
+    </script>
+  </body>
+</html>

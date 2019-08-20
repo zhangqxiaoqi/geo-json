@@ -9,7 +9,7 @@ npm run create 下载geo json数据，可自行下载最新数据，注：不要
 
 安利 [DataV Geo](https://link.juejin.im/?target=http%3A%2F%2Fdatav.aliyun.com%2Ftools%2Fatlas%2F%23%26lat%3D33.521903996156105%26lng%3D104.29849999999999%26zoom%3D4)
 
-
+新增geoCoord数据，内有行动轨迹图（目前只支持2.x版本）
 
 
 
